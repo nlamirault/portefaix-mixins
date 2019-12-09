@@ -99,6 +99,9 @@ loki-mixin: generate-loki-mixin ## Generate mixin for Loki
 .PHONY: kube-state-metrics-mixin
 kube-state-metrics-mixin: generate-kube-state-metrics-mixin ## Generate mixin for KubeStateMetrics
 
+.PHONY: thanos-mixin
+thanos-mixin: generate-thanos-mixin ## Generate mixin for Thanos
+
 .PHONY: package
 package: ## Generate an archive with mixins
 	@echo -e "$(OK_COLOR)[$(APP)] Create mixins archive$(NO_COLOR)"

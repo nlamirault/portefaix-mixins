@@ -6,3 +6,4 @@ loki
 mixins
 node_exporter
 prometheus
+kube-thanos
