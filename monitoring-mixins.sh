@@ -178,23 +178,24 @@ function kube_state_metrics_mixin {
 function thanos_mixin {
     output=$1
     echo -e "${INFO_COLOR}[monitoring-mixins] Retrieve Thanos Mixin ${NO_COLOR}"
-    if [[ -d kube-thanos ]]; then
+    if [[ -d thanos ]]; then
         echo -e "${INFO_COLOR}thanos exists, updating.${NO_COLOR}"
-        pushd kube-thanos
+        pushd thanos
         git pull
     else
-        echo -e "${INFO_COLOR}Clone repository kube-thanos${NO_COLOR}"
-        git clone https://github.com/thanos-io/kube-thanos
-        pushd kube-thanos
+        echo -e "${INFO_COLOR}Clone repository Thanos${NO_COLOR}"
+        git clone https://github.com/thanos-io/thanos
+        pushd thanos
     fi
-    make jsonnet/thanos-mixin/dashboards
-    make jsonnet/thanos-mixin/alerts.yaml
-    make jsonnet/thanos-mixin/rules.yaml
+    make jsonnet-vendor
+    make examples/dashboards
+    make examples/alerts/alerts.yaml
+    make examples/alerts/rules.yaml
     popd
     mkdir -p ${output}/thanos-mixin/
-    cp -r kube-thanos/jsonnet/thanos-mixin/rules.yaml ${output}/thanos-mixin
-    cp -r kube-thanos/jsonnet/thanos-mixin/alerts.yaml ${output}/thanos-mixin
-    cp -r kube-thanos/jsonnet/thanos-mixin/dashboards ${output}/thanos-mixin
+    cp -r thanos/examples/alerts/rules.yaml ${output}/thanos-mixin
+    cp -r thanos/examples/alerts/alerts.yaml ${output}/thanos-mixin
+    cp -r thanos/examples/dashboards ${output}/thanos-mixin
 }
 
 
