@@ -175,6 +175,31 @@ function kube_state_metrics_mixin {
 }
 
 
+function thanos_mixin {
+    output=$1
+    echo -e "${INFO_COLOR}[monitoring-mixins] Retrieve Thanos Mixin ${NO_COLOR}"
+    if [[ -d thanos ]]; then
+        echo -e "${INFO_COLOR}thanos exists, updating.${NO_COLOR}"
+        pushd thanos
+        git pull
+    else
+        echo -e "${INFO_COLOR}Clone repository Thanos${NO_COLOR}"
+        git clone https://github.com/thanos-io/thanos
+        pushd thanos
+    fi
+    make jsonnet-vendor
+    make examples/dashboards
+    make examples/alerts/alerts.yaml
+    make examples/alerts/rules.yaml
+    popd
+    mkdir -p ${output}/thanos-mixin/
+    cp -r thanos/examples/alerts/rules.yaml ${output}/thanos-mixin
+    cp -r thanos/examples/alerts/alerts.yaml ${output}/thanos-mixin
+    cp -r thanos/examples/dashboards ${output}/thanos-mixin
+}
+
+
+
 function usage() {
     echo "usage: $0 <mixin-choice> <output>"
     echo "Arguments:"
@@ -209,6 +234,9 @@ case $1 in
         ;;
     elasticsearch-mixin)
         elasticsearch_mixin ${output}
+        ;;
+    thanos-mixin)
+        thanos_mixin ${output}
         ;;
     # TODO:
     kube-state-metrics-mixin)

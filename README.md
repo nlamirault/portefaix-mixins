@@ -4,9 +4,13 @@
 
 Manage monitoring mixin from several projects :
 
-* Kubernetes
-* Node Exporter
-
+* [x] Kubernetes
+* [x] Node Exporter
+* [x] Prometheus
+* [x] Loki
+* [x] Thanos
+* [x] Etcd
+* [x] Elasticsearch
 
 ## License
 
