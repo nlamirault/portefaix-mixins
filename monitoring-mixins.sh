@@ -31,7 +31,7 @@ function kubernetes_mixin {
     make dashboards_out
     popd
     mkdir -p ${output}/kubernetes-mixin/dashboards
-    cp -r kubernetes-mixin/dashboards_out/* ${output}/kubernetes-mixin/dashboards/
+    cp -r kubernetes-mixin/dashboards_out/*.json ${output}/kubernetes-mixin/dashboards/
     cp -r kubernetes-mixin/prometheus_alerts.yaml ${output}/kubernetes-mixin
     cp -r kubernetes-mixin/prometheus_rules.yaml ${output}/kubernetes-mixin
 }
@@ -60,7 +60,7 @@ function node_mixin {
     make dashboards_out
     popd
     mkdir -p ${output}/node-mixin/dashboards
-    cp -r node_exporter/docs/node-mixin/dashboards_out/* ${output}/node-mixin/dashboards/
+    cp -r node_exporter/docs/node-mixin/dashboards_out/*.json ${output}/node-mixin/dashboards/
     cp -r node_exporter/docs/node-mixin/node_alerts.yaml ${output}/node-mixin
     cp -r node_exporter/docs/node-mixin/node_rules.yaml ${output}/node-mixin
 }
@@ -95,7 +95,7 @@ function prometheus_mixin {
     make dashboards_out
     popd
     mkdir -p ${output}/prometheus-mixin/dashboards
-    cp -r prometheus/documentation/prometheus-mixin/dashboards_out/* ${output}/prometheus-mixin/dashboards/
+    cp -r prometheus/documentation/prometheus-mixin/dashboards_out/*.json ${output}/prometheus-mixin/dashboards/
     cp -r prometheus/documentation/prometheus-mixin/prometheus_alerts.yaml ${output}/prometheus-mixin
 }
 
@@ -119,7 +119,7 @@ function etcd_mixin {
     popd
     mkdir -p ${output}/etcd-mixin/dashboards
     cp -r etcd/Documentation/etcd-mixin/etcd_alerts.yaml ${output}/etcd-mixin
-    cp -r etcd/Documentation/etcd-mixin/etcd_mixin.json ${output}/etcd-mixin/dashboards
+    cp -r etcd/Documentation/etcd-mixin/*.json ${output}/etcd-mixin/dashboards
 }
 
 function elasticsearch_mixin {
@@ -168,6 +168,10 @@ EOF
     mkdir -p dashboards_out
     jsonnet -J vendor -m dashboards_out dashboards.jsonnet
     popd
+
+    mkdir -p ${output}/loki-mixin/dashboards
+    cp -r loki/production/loki-mixin/loki_alerts.yaml ${output}/loki-mixin
+    cp -r loki/production/loki-mixin/dashboards_out/*.json ${output}/loki-mixin/dashboards
 }
 
 function kube_state_metrics_mixin {
