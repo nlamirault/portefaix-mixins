@@ -14,7 +14,7 @@
 
 APP = monitoring-mixins
 
-VERSION = 0.1.0
+VERSION = 0.3.0
 
 SHELL = /bin/bash -o pipefail
 
@@ -39,7 +39,7 @@ OUTPUT_DIRECTORY=mixins
 
 .PHONY: help
 help:
-	@echo -e "$(OK_COLOR)==== $(APP) ====$(NO_COLOR)"
+	@echo -e "$(OK_COLOR)==== $(APP) [$(VERSION)] ====$(NO_COLOR)"
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "$(MAKE_COLOR) : %s\n", $$1, $$2}'
 
 guard-%:
