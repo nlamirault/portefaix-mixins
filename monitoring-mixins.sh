@@ -23,8 +23,11 @@ function kubernetes_mixin {
     fi
     jb install
     echo -e "${INFO_COLOR}[monitoring-mixins] Generate Kubernetes Mixin ${NO_COLOR}"
-    make prometheus_alerts.yaml
-    make prometheus_rules.yaml
+    rm -fr prometheus_alerts.yaml prometheus_rules.yaml dashboards_out
+    # make prometheus_alerts.yaml
+    jsonnet -J vendor -S lib/alerts.jsonnet | gojsontoyaml > prometheus_alerts.yaml
+    # make prometheus_rules.yaml
+    jsonnet -J vendor -S lib/rules.jsonnet | gojsontoyaml > prometheus_rules.yaml
     make dashboards_out
     popd
     mkdir -p ${output}/kubernetes-mixin/dashboards
@@ -48,8 +51,12 @@ function node_mixin {
     fi
     jb install
     echo -e "${INFO_COLOR}[monitoring-mixins] Generate NodeExporter Mixin ${NO_COLOR}"
-    make node_alerts.yaml
-    make node_rules.yaml
+    # TODO: make a Github issue
+    # make node_alerts.yaml
+    jsonnet -S alerts.jsonnet | gojsontoyaml > node_alerts.yaml
+    # make node_rules.yaml
+    jsonnet -S rules.jsonnet | gojsontoyaml > node_rules.yaml
+
     make dashboards_out
     popd
     mkdir -p ${output}/node-mixin/dashboards
@@ -82,7 +89,9 @@ function prometheus_mixin {
     jb install
     echo -e "${INFO_COLOR}[monitoring-mixins] Generate Prometheus Mixin ${NO_COLOR}"
     rm -fr prometheus_alerts.yaml dashboards_out
-    make prometheus_alerts.yaml
+    # TODO: make an issue on Github project
+    # make prometheus_alerts.yaml
+    jsonnet -S alerts.jsonnet | gojsontoyaml > prometheus_alerts.yaml
     make dashboards_out
     popd
     mkdir -p ${output}/prometheus-mixin/dashboards
@@ -106,9 +115,11 @@ function etcd_mixin {
     jb install
     echo -e "${INFO_COLOR}[monitoring-mixins] Generate Etcd Mixin ${NO_COLOR}"
     jsonnet -e '(import "mixin.libsonnet").prometheusAlerts' | gojsontoyaml > etcd_alerts.yaml
+    jsonnet -e '(import "mixin.libsonnet").grafanaDashboards' > etcd_mixin.json
     popd
-    mkdir -p ${output}/etcd-mixin/
+    mkdir -p ${output}/etcd-mixin/dashboards
     cp -r etcd/Documentation/etcd-mixin/etcd_alerts.yaml ${output}/etcd-mixin
+    cp -r etcd/Documentation/etcd-mixin/etcd_mixin.json ${output}/etcd-mixin/dashboards
 }
 
 function elasticsearch_mixin {

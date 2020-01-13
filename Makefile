@@ -102,9 +102,8 @@ kube-state-metrics-mixin: generate-kube-state-metrics-mixin ## Generate mixin fo
 .PHONY: thanos-mixin
 thanos-mixin: generate-thanos-mixin ## Generate mixin for Thanos
 
-
 .PHONY: mixins
-mixins: kubernetes-mixin node-mixin prometheus-mixin etcd-mixin elasticsearch-mixin loki-mixin thanos-mixin kube-state-metrics-mixin ## Generate all mixins
+mixins: kubernetes-mixin node-mixin prometheus-mixin etcd-mixin elasticsearch-mixin loki-mixin thanos-mixin # kube-state-metrics-mixin ## Generate all mixins
 
 .PHONY: package
 package: ## Generate an archive with mixins
