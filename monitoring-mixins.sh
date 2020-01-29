@@ -8,21 +8,18 @@ NO_COLOR="\e[39m"
 INFO_COLOR="\e[34m"
 
 
-
 function kubernetes_mixin {
     output=$1
     echo -e "${INFO_COLOR}[monitoring-mixins] Retrieve Kubernetes Mixin ${NO_COLOR}"
     if [[ -d kubernetes-mixin ]]; then
-        echo -e "${INFO_COLOR}kubernetes-mixin exists, updating${NO_COLOR}"
-        pushd kubernetes-mixin
-        git pull
-    else
-        echo -e "${INFO_COLOR}Clone repository kubernetes-mixin${NO_COLOR}"
-        git clone https://github.com/kubernetes-monitoring/kubernetes-mixin
-        pushd kubernetes-mixin
+        rm -fr kubernetes-mixin
     fi
+    echo -e "${INFO_COLOR}[monitoring-mixins] Clone repository kubernetes-mixin${NO_COLOR}"
+    git clone https://github.com/kubernetes-monitoring/kubernetes-mixin
+    pushd kubernetes-mixin
+
+    echo -e "${INFO_COLOR}[monitoring-mixins] Generate Prometheus alert/rules and Grafana dashboards${NO_COLOR}"
     jb install
-    echo -e "${INFO_COLOR}[monitoring-mixins] Generate Kubernetes Mixin ${NO_COLOR}"
     rm -fr prometheus_alerts.yaml prometheus_rules.yaml dashboards_out
     # make prometheus_alerts.yaml
     jsonnet -J vendor -S lib/alerts.jsonnet | gojsontoyaml > prometheus_alerts.yaml
@@ -41,16 +38,14 @@ function node_mixin {
     output=$1
     echo -e "${INFO_COLOR}[monitoring-mixins] Retrieve NodeExporter Mixin ${NO_COLOR}"
     if [[ -d node-mixin ]]; then
-        echo -e "${INFO_COLOR}node-mixin exists, updating${NO_COLOR}"
-        pushd node_exporter/docs/node-mixin
-        git pull
-    else
-        echo -e "${INFO_COLOR}Clone repository node_exporter${NO_COLOR}"
-        git clone https://github.com/prometheus/node_exporter
-        pushd node_exporter/docs/node-mixin
+        rm -fr node_exporter
     fi
+    echo -e "${INFO_COLOR}[monitoring-mixins] Clone repository node_exporter${NO_COLOR}"
+    git clone https://github.com/prometheus/node_exporter
+    pushd node_exporter/docs/node-mixin
+
+    echo -e "${INFO_COLOR}[monitoring-mixins] Generate Prometheus alert/rules and Grafana dashboards${NO_COLOR}"
     jb install
-    echo -e "${INFO_COLOR}[monitoring-mixins] Generate NodeExporter Mixin ${NO_COLOR}"
     # TODO: make a Github issue
     # make node_alerts.yaml
     jsonnet -S alerts.jsonnet | gojsontoyaml > node_alerts.yaml
@@ -70,14 +65,12 @@ function prometheus_mixin {
     output=$1
     echo -e "${INFO_COLOR}[monitoring-mixins] Retrieve Prometheus Mixin ${NO_COLOR}"
     if [[ -d prometheus ]]; then
-        echo -e "${INFO_COLOR}prometheus-mixin exists, updating${NO_COLOR}"
-        pushd prometheus/documentation/prometheus-mixin
-        git pull
-    else
-        echo -e "${INFO_COLOR}Clone repository prometheus${NO_COLOR}"
-        git clone https://github.com/prometheus/prometheus
-        pushd prometheus/documentation/prometheus-mixin
+        rm -fr prometheus
     fi
+    echo -e "${INFO_COLOR}[monitoring-mixins] Clone repository prometheus${NO_COLOR}"
+    git clone https://github.com/prometheus/prometheus
+    pushd prometheus/documentation/prometheus-mixin
+
     if [[ -d grafonnet-lib ]]; then
         cd grafonnet-lib
         git pull
@@ -86,8 +79,9 @@ function prometheus_mixin {
         git clone https://github.com/grafana/grafonnet-lib.git
     fi
     ln -s grafonnet-lib/grafonnet grafonnet
+
+    echo -e "${INFO_COLOR}[monitoring-mixins] Generate Prometheus alert/rules and Grafana dashboards${NO_COLOR}"
     jb install
-    echo -e "${INFO_COLOR}[monitoring-mixins] Generate Prometheus Mixin ${NO_COLOR}"
     rm -fr prometheus_alerts.yaml dashboards_out
     # TODO: make an issue on Github project
     # make prometheus_alerts.yaml
@@ -104,16 +98,14 @@ function etcd_mixin {
     output=$1
     echo -e "${INFO_COLOR}[monitoring-mixins] Retrieve Etcd Mixin ${NO_COLOR}"
     if [[ -d etcd ]]; then
-        echo -e "${INFO_COLOR}etcd-mixin exists, updating${NO_COLOR}"
-        pushd etcd/Documentation/etcd-mixin
-        git pull
-    else
-        echo -e "${INFO_COLOR}Clone repository Etcd${NO_COLOR}"
-        git clone https://github.com/etcd-io/etcd.git
-        pushd etcd/Documentation/etcd-mixin
+        rm -fr etcd
     fi
+    echo -e "${INFO_COLOR}[monitoring-mixins] Clone repository Etcd${NO_COLOR}"
+    git clone https://github.com/etcd-io/etcd.git
+    pushd etcd/Documentation/etcd-mixin
+
+    echo -e "${INFO_COLOR}[monitoring-mixins] Generate Prometheus alert/rules and Grafana dashboards${NO_COLOR}"
     jb install
-    echo -e "${INFO_COLOR}[monitoring-mixins] Generate Etcd Mixin ${NO_COLOR}"
     jsonnet -e '(import "mixin.libsonnet").prometheusAlerts' | gojsontoyaml > etcd_alerts.yaml
     jsonnet -e '(import "mixin.libsonnet").grafanaDashboards' > etcd_mixin.json
     popd
@@ -126,16 +118,14 @@ function elasticsearch_mixin {
     output=$1
     echo -e "${INFO_COLOR}[monitoring-mixins] Retrieve Elasticsearch Mixin ${NO_COLOR}"
     if [[ -d elasticsearch-mixin ]]; then
-        echo -e "${INFO_COLOR}elasticsearch-mixin exists, updating.${NO_COLOR}"
-        pushd elasticsearch-mixin
-        git pull
-    else
-        echo -e "${INFO_COLOR}Clone repository elasticsearch-mixin${NO_COLOR}"
-        git clone https://github.com/lukas-vlcek/elasticsearch-mixin.git
-        pushd elasticsearch-mixin
+        rm -fr elasticsearch-mixin
     fi
+    echo -e "${INFO_COLOR}[monitoring-mixins] Clone repository elasticsearch-mixin${NO_COLOR}"
+    git clone https://github.com/lukas-vlcek/elasticsearch-mixin.git
+    pushd elasticsearch-mixin
+
+    echo -e "${INFO_COLOR}[monitoring-mixins] Generate Prometheus alert/rules and Grafana dashboards${NO_COLOR}"
     jb install
-    echo -e "${INFO_COLOR}[monitoring-mixins] Generate Elasticsearch Mixin ${NO_COLOR}"
     make prometheus_alerts.yaml prometheus_rules.yaml dashboards_out
     popd
 }
@@ -144,17 +134,15 @@ function elasticsearch_mixin {
 function loki_mixin {
     output=$1
     echo -e "${INFO_COLOR}[monitoring-mixins] Retrieve Loki Mixin ${NO_COLOR}"
-    if [[ -d loki-mixin ]]; then
-        echo -e "${INFO_COLOR}loki-mixin exists, updating.${NO_COLOR}"
-        pushd loki-mixin
-        git pull
-    else
-        echo -e "${INFO_COLOR}Clone repository loki-mixin${NO_COLOR}"
-        git clone https://github.com/grafana/loki
-        pushd loki/production/loki-mixin
+    if [[ -d loki ]]; then
+        rm -fr loki
     fi
+    echo -e "${INFO_COLOR}[monitoring-mixins] Clone repository loki-mixin${NO_COLOR}"
+    git clone https://github.com/grafana/loki
+    pushd loki/production/loki-mixin
+
+    echo -e "${INFO_COLOR}[monitoring-mixins] Generate Prometheus alert/rules and Grafana dashboards${NO_COLOR}"
     jb install
-    echo -e "${INFO_COLOR}[monitoring-mixins] Generate Loki Mixin ${NO_COLOR}"
     echo "std.manifestYamlDoc((import 'mixin.libsonnet').prometheusAlerts)" > alerts.jsonnet
     cat << EOF > dashboards.jsonnet
     local dashboards = (import 'mixin.libsonnet').dashboards;
@@ -164,7 +152,8 @@ function loki_mixin {
     }
 EOF
 
-    jsonnet -S alerts.jsonnet > loki_alerts.yaml
+    echo -e "${INFO_COLOR}[monitoring-mixins] Generate Prometheus alert/rules and Grafana dashboards${NO_COLOR}"
+    jsonnet -S alerts.jsonnet | gojsontoyaml > loki_alerts.yaml
     mkdir -p dashboards_out
     jsonnet -J vendor -m dashboards_out dashboards.jsonnet
     popd
@@ -178,15 +167,19 @@ function kube_state_metrics_mixin {
     output=$1
     echo -e "${INFO_COLOR}[monitoring-mixins] Retrieve KubeStateMetrics Mixin ${NO_COLOR}"
     if [[ -d kube-state-metrics ]]; then
-        echo -e "${INFO_COLOR}kube-state-metrics exists, updating.${NO_COLOR}"
-        pushd kube-state-metrics
-        git pull
-    else
-        echo -e "${INFO_COLOR}Clone repository kube-state-metrics${NO_COLOR}"
-        git clone https://github.com/kubernetes/kube-state-metrics
-        pushd kube-state-metrics
+        rm -fr kube-state-metrics
     fi
+    echo -e "${INFO_COLOR}[monitoring-mixins] Clone repository kube-state-metrics${NO_COLOR}"
+    git clone https://github.com/kubernetes/kube-state-metrics
+    pushd kube-state-metrics
+
+    echo -e "${INFO_COLOR}[monitoring-mixins] Generate Prometheus alert/rules and Grafana dashboards${NO_COLOR}"
+    make install-tools
     make mixin
+
+    popd
+    mkdir -p ${output}/kube-state-metrics-mixin/
+    cp -r kube-state-metrics/examples/prometheus-alerting-rules/alerts.yaml ${output}/kube-state-metrics-mixin/
 }
 
 
@@ -194,25 +187,24 @@ function thanos_mixin {
     output=$1
     echo -e "${INFO_COLOR}[monitoring-mixins] Retrieve Thanos Mixin ${NO_COLOR}"
     if [[ -d thanos ]]; then
-        echo -e "${INFO_COLOR}thanos exists, updating.${NO_COLOR}"
-        pushd thanos
-        git pull
-    else
-        echo -e "${INFO_COLOR}Clone repository Thanos${NO_COLOR}"
-        git clone https://github.com/thanos-io/thanos
-        pushd thanos
+        rm -fr thanos
     fi
+    echo -e "${INFO_COLOR}[monitoring-mixins] Clone repository Thanos${NO_COLOR}"
+    git clone https://github.com/thanos-io/thanos
+    pushd thanos
+
+    echo -e "${INFO_COLOR}[monitoring-mixins] Generate Prometheus alert/rules and Grafana dashboards${NO_COLOR}"
     make jsonnet-vendor
     make examples/dashboards
     make examples/alerts/alerts.yaml
     make examples/alerts/rules.yaml
+
     popd
     mkdir -p ${output}/thanos-mixin/
     cp -r thanos/examples/alerts/rules.yaml ${output}/thanos-mixin
     cp -r thanos/examples/alerts/alerts.yaml ${output}/thanos-mixin
     cp -r thanos/examples/dashboards ${output}/thanos-mixin
 }
-
 
 
 function usage() {
