@@ -1,9 +1,0 @@
-elasticsearch-mixin
-etcd
-kubernetes-mixin
-kube-state-metrics
-loki
-mixins
-node_exporter
-prometheus
-thanos
