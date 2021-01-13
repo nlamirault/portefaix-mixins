@@ -1,0 +1,16 @@
+{
+  "version": 1,
+  "dependencies": [
+    {
+      "source": {
+        "git": {
+          "remote": "https://github.com/grafana/grafana.git",
+          "subdir": "grafana-mixin"
+        }
+      },
+      "version": "e375fb0f2b05e614087ac0c5189e73236405985a",
+      "sum": "ALKaPYstn337tIPnwuugTWpkMozjZWHV5l1WrS/mS0Q="
+    }
+  ],
+  "legacyImports": false
+}
