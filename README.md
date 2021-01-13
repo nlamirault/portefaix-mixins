@@ -16,7 +16,6 @@ Manage monitoring mixin from several projects :
 
 See [LICENSE](LICENSE) for the complete license.
 
-
 ## Contact
 
 Nicolas Lamirault <nicolas.lamirault@gmail.com>
