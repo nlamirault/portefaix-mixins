@@ -1,0 +1,23 @@
+# labels to be used with /area command
+area:
+  - 'mixin'
+
+kind:
+  - 'documentation'
+  - 'discussion'
+  - 'feature'
+  - 'question'
+
+priority:
+  - 'low'
+  - 'medium'
+  - 'high'
+  - 'critical'
+
+# File globs for PR labeler
+# tests:
+#   - '**/*.test.ts'
+
+'area/mixin':
+  - mixins/*
+  - mixins/**/*
