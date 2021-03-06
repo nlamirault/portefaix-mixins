@@ -15,7 +15,9 @@ categories:
       - 'bugfix'
       - 'bug'
   - title: '🚨 Maintenance'
-    label: 'chore'
+    labels:
+      - 'area/renovate'
+      - 'chore'
   - title: '📝 Documentation'
     labels:
       - 'kind/documentation'
@@ -36,7 +38,6 @@ version-resolver:
       - 'patch'
   default: patch
 template: |
-  ## Changes
+  ## 🚧 Changes
 
   $CHANGES
-
