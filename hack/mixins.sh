@@ -201,6 +201,11 @@ function elasticsearch_mixin {
     monitoring_mixin "elasticsearch-mixin" ${output} "" "" "dashboards"
 }
 
+function minio_mixin {
+    echo -e "${OK_COLOR}[monitoring-mixins] Setup Minio Mixin ${NO_COLOR}"
+    monitoring_mixin "minio-mixin" ${output} "" "" "dashboards"
+}
+
 # echo $#
 if [ "$#" -lt 3 ] || [ "$#" -gt 5 ]; then
     usage
@@ -216,18 +221,19 @@ echo -e "${OK_COLOR}[monitoring-mixins] Generate mixins: ${app}-v${version} ${NO
 if [ "$#" -eq 4 ]; then
     $(echo $4 | sed -e "s/-/_/g") ${output}
 else
-    kubernetes_mixin ${output}
-    node_exporter_mixin ${output}
-    prometheus_operator_mixin ${output}
-    prometheus_mixin ${output}
-    alertmanager_mixin ${output}
-    kube_state_metrics_mixin ${output}
-    thanos_mixin ${output}
-    cert_manager_mixin ${output}
-    grafana_mixin ${output}
-    loki_mixin ${output}
-    promtail_mixin ${output}
-    etcd_mixin ${output}
-    memcached_mixin ${output}
-    elasticsearch_mixin ${output}
+    # kubernetes_mixin ${output}
+    # node_exporter_mixin ${output}
+    # prometheus_operator_mixin ${output}
+    # prometheus_mixin ${output}
+    # alertmanager_mixin ${output}
+    # kube_state_metrics_mixin ${output}
+    # thanos_mixin ${output}
+    # cert_manager_mixin ${output}
+    # grafana_mixin ${output}
+    # loki_mixin ${output}
+    # promtail_mixin ${output}
+    # etcd_mixin ${output}
+    # memcached_mixin ${output}
+    # elasticsearch_mixin ${output}
+    minio_mixin ${output}
 fi
